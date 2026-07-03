@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ตอบไงดี AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mali:ital,wght@0,300;0,400;0,500;0,600;0,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --panel: rgba(255, 255, 255, 0.92);
+        --ink: #49324a;
+        --muted: #8a6b86;
+        --line: #f2cfe1;
+        --pink: #ff8fc7;
+        --pink-dark: #dd5ca2;
+        --pink-soft: #ffe2f0;
+        --butter: #fff0aa;
+        --danger: #c2416b;
+        font-family: "Mali", "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--ink);
+        background:
+          radial-gradient(
+            circle at 12% 12%,
+            rgba(255, 240, 170, 0.7),
+            transparent 28%
+          ),
+          radial-gradient(
+            circle at 88% 10%,
+            rgba(199, 231, 255, 0.75),
+            transparent 26%
+          ),
+          radial-gradient(
+            circle at 72% 86%,
+            rgba(184, 244, 221, 0.72),
+            transparent 28%
+          ),
+          linear-gradient(135deg, #fff7fb 0%, #fff0f7 42%, #f7f0ff 100%);
+      }
+
+      .shell {
+        width: min(1050px, calc(100% - 28px));
+        margin: 0 auto;
+        padding: 28px 0 42px;
+      }
+
+      header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--pink-dark);
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(36px, 6vw, 66px);
+        line-height: 1;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+
+      .subtitle {
+        max-width: 650px;
+        margin: 12px 0 0;
+        color: var(--muted);
+        line-height: 1.7;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .status-pill {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        color: var(--pink-dark);
+        padding: 10px 14px;
+        border-radius: 999px;
+        white-space: nowrap;
+        font-size: 14px;
+        font-weight: 700;
+        box-shadow: 0 10px 26px rgba(221, 92, 162, 0.12);
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(340px, 1.05fr);
+        gap: 18px;
+        align-items: start;
+      }
+
+      .tool,
+      .result {
+        background: var(--panel);
+        border: 1px solid rgba(242, 207, 225, 0.9);
+        border-radius: 24px;
+        padding: 20px;
+        box-shadow: 0 18px 45px rgba(129, 82, 123, 0.13);
+        backdrop-filter: blur(10px);
+      }
+
+      .section-title {
+        margin: 0 0 14px;
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      label {
+        display: block;
+        margin: 0 0 8px;
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      textarea,
+      select {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.96);
+        color: var(--ink);
+        font: inherit;
+        font-weight: 500;
+      }
+
+      textarea {
+        min-height: 170px;
+        resize: vertical;
+        padding: 15px 16px;
+        line-height: 1.65;
+      }
+
+      select {
+        min-height: 50px;
+        padding: 0 14px;
+        cursor: pointer;
+      }
+
+      textarea::placeholder {
+        color: #ba93ad;
+      }
+
+      textarea:focus,
+      select:focus {
+        outline: 4px solid rgba(255, 143, 199, 0.22);
+        border-color: var(--pink);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      button {
+        width: 100%;
+        min-height: 52px;
+        margin-top: 16px;
+        border: 0;
+        border-radius: 18px;
+        background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+        color: white;
+        cursor: pointer;
+        font: inherit;
+        font-weight: 700;
+        box-shadow: 0 12px 24px rgba(221, 92, 162, 0.28);
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 30px rgba(221, 92, 162, 0.32);
+      }
+
+      button:disabled {
+        cursor: wait;
+        opacity: 0.72;
+        transform: none;
+      }
+
+      .meta {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .metric {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 11px;
+        min-width: 0;
+      }
+
+      .metric:nth-child(1) {
+        background: #fff3c7;
+      }
+
+      .metric:nth-child(2) {
+        background: #ffe1ef;
+      }
+
+      .metric:nth-child(3) {
+        background: #e7dcff;
+      }
+
+      .metric span {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .metric strong {
+        display: block;
+        margin-top: 3px;
+        overflow-wrap: anywhere;
+        font-size: 14px;
+      }
+
+      .replies {
+        display: grid;
+        gap: 12px;
+      }
+
+      .match-hint {
+        display: none;
+        margin-bottom: 14px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: rgba(255, 243, 250, 0.82);
+        color: var(--muted);
+        padding: 11px 12px;
+        line-height: 1.6;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .match-hint strong {
+        color: var(--pink-dark);
+      }
+
+      .reply {
+        display: grid;
+        grid-template-columns: 36px 1fr auto;
+        align-items: center;
+        gap: 11px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 12px;
+        box-shadow: 0 10px 22px rgba(129, 82, 123, 0.08);
+      }
+
+      .reply-number {
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--butter), var(--pink-soft));
+        color: var(--pink-dark);
+        font-weight: 700;
+      }
+
+      .reply-text {
+        line-height: 1.65;
+        font-weight: 600;
+      }
+
+      .copy {
+        width: auto;
+        min-height: 36px;
+        margin: 0;
+        padding: 0 12px;
+        background: #fff3fa;
+        color: var(--pink-dark);
+        border: 1px solid var(--line);
+        box-shadow: none;
+        font-size: 13px;
+      }
+
+      .copy:hover {
+        background: var(--pink-soft);
+        box-shadow: none;
+      }
+
+      .empty {
+        border: 2px dashed var(--line);
+        border-radius: 20px;
+        padding: 20px;
+        color: var(--muted);
+        line-height: 1.7;
+        background: rgba(255, 255, 255, 0.62);
+      }
+
+      .error {
+        color: var(--danger);
+        margin-top: 12px;
+        min-height: 24px;
+        font-weight: 700;
+      }
+
+      .level-card {
+        margin-top: 14px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: rgba(255, 243, 250, 0.82);
+        padding: 12px;
+      }
+
+      .level-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 8px;
+        color: var(--pink-dark);
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .level-track {
+        height: 13px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #ffffff;
+        border: 1px solid var(--line);
+      }
+
+      .level-fill {
+        width: 0%;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--butter), var(--pink));
+        transition: width 0.35s ease;
+      }
+
+      .level-note {
+        margin-top: 7px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      @media (max-width: 860px) {
+        header {
+          display: block;
+        }
+
+        .status-pill {
+          display: inline-block;
+          margin-top: 14px;
+        }
+
+        main,
+        .grid,
+        .meta {
+          grid-template-columns: 1fr;
+        }
+
+        .reply {
+          grid-template-columns: 36px 1fr;
+        }
+
+        .copy {
+          grid-column: 1 / -1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header>
+        <div>
+          <p class="eyebrow">แชทนี้ตอบไงดีนะ</p>
+          <h1>ตอบไงดี AI</h1>
+          <p class="subtitle">
+            เลือกแค่คุยกับใคร แล้วอยากได้คำตอบแนวไหน
+            ที่เหลือให้ระบบจัดให้แบบไม่ต้องคิดเยอะ
+          </p>
+        </div>
+        <div class="status-pill" id="serverStatus">พร้อมช่วยตอบ</div>
+      </header>
+
+      <main>
+        <section class="tool">
+          <h2 class="section-title">ใส่ข้อความตรงนี้</h2>
+          <form id="replyForm">
+            <label for="message">ข้อความที่เขาส่งมา</label>
+            <textarea
+              id="message"
+              name="message"
+              placeholder="เช่น สัส เอาจริงดิ เอ็นดูไหม"
+              required
+            >
+ตุ๊บไหม</textarea
+            >
+
+            <div class="grid">
+              <div>
+                <label for="relationship">ความสัมพันธ์</label>
+                <select id="relationship" name="relationship">
+                  <option value="friend" selected>เพื่อน</option>
+                  <option value="girlfriend">แฟน</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="answerMode">แนวคำตอบ</label>
+                <select id="answerMode" name="answerMode">
+                  <option value="auto" selected>อัตโนมัติ</option>
+                  <option value="cute_kathoey">น่ารัก</option>
+                  <option value="funny_kathoey">กระเทย</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="level-card">
+              <div class="level-head">
+                <span id="levelLabel">เลเวล 1</span>
+                <span id="xpLabel">0 / 5 XP</span>
+              </div>
+              <div class="level-track" aria-hidden="true">
+                <div class="level-fill" id="levelFill"></div>
+              </div>
+              <div class="level-note">ใช้บ่อยขึ้นหลอดจะเพิ่ม</div>
+            </div>
+
+            <button id="submitButton" type="submit">
+              ช่วยคิดคำตอบให้หน่อย
+            </button>
+            <div class="error" id="errorText"></div>
+          </form>
+        </section>
+
+        <section class="result" aria-live="polite">
+          <h2 class="section-title">คำตอบที่แนะนำ</h2>
+          <div class="meta">
+            <div class="metric">
+              <span>เจตนา</span>
+              <strong id="intentValue">-</strong>
+            </div>
+            <div class="metric">
+              <span>วิเคราะห์จาก</span>
+              <strong id="intentSourceValue">-</strong>
+            </div>
+            <div class="metric">
+              <span>คุยกับ</span>
+              <strong id="relationshipValue">-</strong>
+            </div>
+            <div class="metric">
+              <span>แนวตอบ</span>
+              <strong id="answerModeValue">-</strong>
+            </div>
+          </div>
+
+          <div class="match-hint" id="matchHint"></div>
+
+          <div class="replies" id="replies">
+            <div class="empty">
+              กดปุ่มแล้วคำตอบจะมาอยู่ตรงนี้ เลือกคัดลอกไปใช้ได้เลย
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const displayText = {
+        relationship: {
+          friend: "เพื่อน",
+          girlfriend: "แฟน",
+        },
+        answerMode: {
+          auto: "อัตโนมัติ",
+          cute_kathoey: "น่ารักกระเทย",
+          funny_kathoey: "กวนแรงกระเทย",
+        },
+        intentSource: {
+          ml: "ML",
+          keyword: "keyword",
+          fuzzy: "คำใกล้เคียง",
+        },
+      };
+
+      const form = document.querySelector("#replyForm");
+      const message = document.querySelector("#message");
+      const relationship = document.querySelector("#relationship");
+      const answerMode = document.querySelector("#answerMode");
+      const submitButton = document.querySelector("#submitButton");
+      const errorText = document.querySelector("#errorText");
+      const serverStatus = document.querySelector("#serverStatus");
+      const intentValue = document.querySelector("#intentValue");
+      const intentSourceValue = document.querySelector("#intentSourceValue");
+      const relationshipValue = document.querySelector("#relationshipValue");
+      const answerModeValue = document.querySelector("#answerModeValue");
+      const matchHint = document.querySelector("#matchHint");
+      const replies = document.querySelector("#replies");
+      const levelLabel = document.querySelector("#levelLabel");
+      const xpLabel = document.querySelector("#xpLabel");
+      const levelFill = document.querySelector("#levelFill");
+      const XP_PER_LEVEL = 5;
+
+      function getUsageXp() {
+        return Number(localStorage.getItem("tobNgaiDeeXp") || "0");
+      }
+
+      function renderLevel() {
+        const xp = getUsageXp();
+        const level = Math.floor(xp / XP_PER_LEVEL) + 1;
+        const currentXp = xp % XP_PER_LEVEL;
+        const progress = (currentXp / XP_PER_LEVEL) * 100;
+
+        levelLabel.textContent = `เลเวล ${level}`;
+        xpLabel.textContent = `${currentXp} / ${XP_PER_LEVEL} XP`;
+        levelFill.style.width = `${progress}%`;
+      }
+
+      function addUsageXp() {
+        localStorage.setItem("tobNgaiDeeXp", String(getUsageXp() + 1));
+        renderLevel();
+      }
+
+      function setLoading(isLoading) {
+        submitButton.disabled = isLoading;
+        submitButton.textContent = isLoading
+          ? "กำลังคิดให้น้า..."
+          : "ช่วยคิดคำตอบให้หน่อย";
+      }
+
+      function renderResult(data) {
+        intentValue.textContent = data.intent;
+        const source =
+          displayText.intentSource[data.intent_source] || data.intent_source;
+        intentSourceValue.textContent =
+          data.intent_source === "ml"
+            ? `${source} ${Math.round(data.ml_confidence * 100)}%`
+            : source;
+        relationshipValue.textContent =
+          displayText.relationship[data.relationship] || data.relationship;
+        answerModeValue.textContent =
+          displayText.answerMode[data.answer_mode] || data.answer_mode;
+        if (data.matched_text && data.match_score >= 0.58) {
+          const percent = Math.round(data.match_score * 100);
+          matchHint.style.display = "block";
+          matchHint.innerHTML = `ใกล้เคียงกับ <strong>${data.matched_text}</strong> (${percent}%)`;
+        } else {
+          matchHint.style.display = "none";
+          matchHint.textContent = "";
+        }
+        replies.innerHTML = "";
+
+        data.recommended_replies.forEach((reply, index) => {
+          const item = document.createElement("div");
+          item.className = "reply";
+          item.innerHTML = `
+            <div class="reply-number">${index + 1}</div>
+            <div class="reply-text">${reply}</div>
+            <button class="copy" type="button">คัดลอก</button>
+          `;
+
+          item.querySelector(".copy").addEventListener("click", async () => {
+            await navigator.clipboard.writeText(reply);
+            item.querySelector(".copy").textContent = "คัดลอกแล้ว";
+          });
+
+          replies.appendChild(item);
+        });
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        errorText.textContent = "";
+        serverStatus.textContent = "กำลังคิดคำตอบ";
+        setLoading(true);
+
+        try {
+          const response = await fetch("/api/analyze", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              text: message.value.trim(),
+              relationship: relationship.value,
+              answer_mode: answerMode.value,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("เรียก API ไม่สำเร็จ");
+          }
+
+          const data = await response.json();
+          renderResult(data);
+          addUsageXp();
+          serverStatus.textContent = "พร้อมช่วยตอบ";
+        } catch (error) {
+          errorText.textContent =
+            "ยังสร้างคำตอบไม่ได้ ลองเช็กว่า server เปิดอยู่ไหม";
+          serverStatus.textContent = "มีบางอย่างสะดุด";
+        } finally {
+          setLoading(false);
+        }
+      });
+
+      renderLevel();
+    </script>
+  </body>
+</html>
