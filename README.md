@@ -96,6 +96,41 @@ python -m uvicorn src.api_th:app --reload
 http://127.0.0.1:8000
 ```
 
+## วิธี deploy ขึ้น Vercel
+
+โปรเจกต์นี้มีไฟล์สำหรับ Vercel แล้ว:
+
+```text
+api/index.py
+vercel.json
+.vercelignore
+```
+
+ขั้นตอน:
+
+```bash
+git add .
+git commit -m "add vercel deployment"
+git push
+```
+
+จากนั้นเข้า Vercel แล้ว Import GitHub repo นี้ได้เลย หรือใช้ Vercel CLI:
+
+```bash
+npm i -g vercel
+vercel
+```
+
+ถ้า deploy production:
+
+```bash
+vercel --prod
+```
+
+Vercel จะติดตั้งจาก `requirements.txt` และเรียก FastAPI app จาก `api/index.py`
+
+หมายเหตุ: ถ้า build fail เพราะ package ใหญ่เกินไป ให้ลบไฟล์/โฟลเดอร์ที่ไม่จำเป็นออกจาก deploy หรือพิจารณาไม่ deploy notebook ขนาดใหญ่
+
 เว็บจะเรียก API นี้:
 
 ```text
